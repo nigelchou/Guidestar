@@ -54,7 +54,7 @@ To use ``Guidestar``, we recommend setting up a ``conda`` environment and clonin
 Users can directly install the prequisite packages from `environment.yml` here after cloning in this repository:
 
       (base) $ git clone https://github.com/nigelchou/Guidestar.git
-      (base) $ cd Guidestar_paper
+      (base) $ cd Guidestar
       (base) $ conda env create --name Guidestar --file=environment.yml
       (base) $ conda activate Guidestar
 
