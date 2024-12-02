@@ -139,7 +139,7 @@ All data and code for the figures can be found in [DataForFigures](DataForFigure
 
 Bug reports, questions, request for enhancements or other contributions
 can be raised at the [issue
-page](<kokhao's github>).
+page](<https://github.com/nigelchou/Guidestar/issues>).
 
 ## Authors <a name="authors"></a>
 
