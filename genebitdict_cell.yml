@@ -1,0 +1,10 @@
+raw_folder: '/path_to_raw_data/' #folder contain smfish/merfish raw ie. cells/100uM_data/
+merfish_outpath: '/path_to_raw_data/output/user_25FOVs_mag0_10_lc400_20230312_1559/' #folder contain merfish analysis
+gene_list_merfish: ['Gpam', 'Hnf4a','Ube2z', 'Acly'] #gene to analyse 
+
+gene_bit_dict_guidestar : {'Cy5_01':'Gpam','Cy7_00':'Hnf4a','Cy7_01':'Ube2z', 'Cy5_00':'Acly'} #gene to smfish image name
+bit_gene_dict_guidestar: {'Gpam':'Cy5_01', 'Ube2z':'Cy7_01', 'Acly':'Cy5_00','Hnf4a':'Cy7_00'}
+
+gene_threshold_dict : {'Cy5_01': 0.07, 'Cy7_00':0.08, 'Cy7_01':0.07, 'Cy5_00':0.07} #threshold for peak local max
+gene_bit_dict_merfish : {'Gpam':['Cy7_07','Cy7_05','Cy5_08','Cy5_04'],'Acly':['Cy7_09','Cy7_02','Cy5_08','Cy5_07'],'Ube2z':['Cy7_03','Cy7_02','Cy5_06','Cy5_03'],'Hnf4a':['Cy7_05','Cy7_04','Cy5_09','Cy5_02']} #gene to merfish image name
+

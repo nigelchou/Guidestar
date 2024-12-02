@@ -1,0 +1,17 @@
+,merfish gene,guidestar gene,colocalisation counts
+0,Acly,Acly,35199
+1,Acly,Gpam,620
+2,Acly,Hnf4a,1261
+3,Acly,Ube2z,2072
+4,Gpam,Acly,987
+5,Gpam,Gpam,12747
+6,Gpam,Hnf4a,482
+7,Gpam,Ube2z,667
+8,Hnf4a,Acly,1673
+9,Hnf4a,Gpam,359
+10,Hnf4a,Hnf4a,16040
+11,Hnf4a,Ube2z,980
+12,Ube2z,Acly,1764
+13,Ube2z,Gpam,377
+14,Ube2z,Hnf4a,759
+15,Ube2z,Ube2z,18650
