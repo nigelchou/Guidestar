@@ -13,9 +13,14 @@ import seaborn as sns
 from sklearn.utils import resample
 from itertools import combinations
 
-GS_filepath = '/Volumes/Seagate Backup Plus Drive/1 year RA data/Guidestar files/cells/colocaldist4_20230312/Cell_LM39_25FOVs_GuidestarGenes_training_dist4.csv'
+# ---- Main folder = the repository folder, which holds Data/ (layout described in Data/README.md). ----
+# Run this from the folder the file is in, or set the environment variable GUIDESTAR_MAIN_DIR to the repository path.
+main_dir = os.environ.get('GUIDESTAR_MAIN_DIR', '..')
+
+
+GS_filepath = os.path.join(main_dir, 'Data/100uM/output/colocalisation/colocaldist4_20230312/Cell_LM39_25FOVs_GuidestarGenes_training_dist4.csv')
 GS_genes_data = pd.read_csv(GS_filepath)
-output_dir = '/Volumes/Seagate Backup Plus Drive/1 year RA data/20230930/'
+output_dir = os.path.join(main_dir, 'Data/model_optimisation/20230930/')
 output_name = 'NumGenes_cell.csv'
 GS_gene_list = ['Acly','Hnf4a','Ube2z','Gpam']
 blank_ratio = 1

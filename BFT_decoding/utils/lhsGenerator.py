@@ -14,8 +14,7 @@ import pprint as pp
 
 from typing import Dict, List, Tuple
 
-from external.doe_lhs import lhs
-from scipy.stats import norm
+from BFT_decoding.external.doe_lhs import lhs
 
 
 def lhsGen(range_dict: Dict[str, Tuple[float, float]],

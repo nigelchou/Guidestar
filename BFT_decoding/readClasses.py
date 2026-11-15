@@ -48,6 +48,24 @@ def readDoryImg(file_path: str,
     else:
         return img
 
+def readTritonImg(file_path: str,
+                  frame: int = None, ) -> np.ndarray:
+    """
+    read Triton file format (multiframe ome.tif files, one for each FOV and hyb round containing all colours)
+
+    :returns 2D or 3D numpy array with the dimensions (z?, y,x)
+    """
+
+    if frame is None:
+        raise ValueError("Cannot read triton format image. Frame of multiframe ome.tif file not specified")
+
+    with warnings.catch_warnings():
+        # filter out 'not an ome-tiff master file' UserWarning
+        warnings.simplefilter("ignore", category=UserWarning)
+        img = skimage.io.imread(file_path)[:, :, frame]
+
+    return img
+
 
 #
 # =====================================================================================================================

@@ -55,9 +55,11 @@ for bft in misid_data['bft']:
         results_dict_gene[g]['F1'].append(F1)
 
 BFT_results_bygene = pd.concat({k: pd.DataFrame(v) for k, v in results_dict_gene.items()}, axis=1)
-BFT_results_bygene.to_csv(os.path.join(output_dir,'cell_extendedmisid_bygene_metrics.csv'))
+# BFT_results_bygene.to_csv(os.path.join(output_dir,'cell_extendedmisid_bygene_metrics.csv'))
 
 BFT_results_bygene['misid'] = misid_data['misid']
+BFT_results_bygene.to_csv(os.path.join(output_dir,'cell_extendedmisid_bygene_metrics.csv'))
+
 
 fig, axes = plt.subplots(2,2, sharex=True, sharey=True, figsize=(10,6))
 axes = axes.ravel()

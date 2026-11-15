@@ -22,7 +22,7 @@ from utilsN.FPKM_functions import *
 
 GS_filepath = 'Cell_LM39_25FOVs_GuidestarGenes_training.csv'
 merfish_filepath = 'Cell_LM39_25FOVs_MerfishData.csv'
-fpkm_path = '../DataForFigures/fpkm_data.tsv'
+fpkm_path = '../DataForFigures/cell_fpkm_data.tsv'
 df_fpkm = pd.read_csv(fpkm_path, sep='\t', header=None, names=['genes','FPKM'])
 
 GS_genes_data = pd.read_csv(GS_filepath)

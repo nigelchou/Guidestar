@@ -25,9 +25,14 @@ from sklearn.utils import resample
 from sklearn.pipeline import Pipeline
 from DiscretisationFunctions import *
 
-GS_filepath = '/Volumes/Seagate Backup Plus Drive/1 year RA data/Guidestar files/tissue/colocaldist4_20240723_try2/Liver_LM39_49FOVs_GuidestarGenes_training.csv'
+# ---- Main folder = the repository folder, which holds Data/ (layout described in Data/README.md). ----
+# Run this from the folder the file is in, or set the environment variable GUIDESTAR_MAIN_DIR to the repository path.
+main_dir = os.environ.get('GUIDESTAR_MAIN_DIR', '..')
+
+
+GS_filepath = os.path.join(main_dir, 'Data/60uM/output/colocalisation/colocaldist4_20240723_try2/Liver_LM39_49FOVs_GuidestarGenes_training.csv')
 GS_genes_data = pd.read_csv(GS_filepath)
-output_dir = '/Volumes/Seagate Backup Plus Drive/1 year RA data/20240723/'
+output_dir = os.path.join(main_dir, 'Data/model_optimisation/20240723/')
 
 # LIVER
 model_type = 'RF'

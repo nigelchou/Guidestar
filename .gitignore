@@ -1,0 +1,16 @@
+# data are deposited separately; only the layout description is tracked
+Data/*
+!Data/README.md
+
+# Python / Jupyter / R
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.Rhistory
+.RData
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
