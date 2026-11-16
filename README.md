@@ -1,7 +1,7 @@
 # Guidestar: a spike-in approach to improve RNA detection accuracy in imaging-based spatial transcriptomics
 
 
-### Jazlynn Tan\*, Lurong Wang, Wan Yi Seow, Jeeranan Boonruangkan, Mike Huang, Jiamin Toh, Kok Hao Chen, Nigel Chou
+### Jazlynn Xiu Min Tan\*, Lurong Wang, Wan Yi Seow, Jeeranan Boonruangkan, Mike Huang, Jiamin Toh, Xinrui Zhou, Kok Hao Chen, Nigel Chou
 
 ## Overview
 
