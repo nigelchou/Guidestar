@@ -19,14 +19,14 @@ import numpy as np
 
 from scipy.spatial import cKDTree
 
-from BFT_decoding.geneData import GeneData
-from BFT_decoding.writeClasses import DaxWriter
+from .geneData import GeneData
+from .writeClasses import DaxWriter
 
 # _____ Imports for plotting _____
-from BFT_decoding.utils.readImagesFunctions import readImages
-from BFT_decoding.utils.imagesQC import showImagesByBit
-from BFT_decoding.utils.registrationQC import showRegistrationByBit
-from BFT_decoding.utils.printFunctions import ReportTime
+from .readImagesFunctions import readImages
+from .utils.imagesQC import showImagesByBit
+from .utils.registrationQC import showRegistrationByBit
+from .utils.printFunctions import ReportTime
 
 
 class ImageData(object):
@@ -1014,7 +1014,7 @@ if __name__ == "__main__":
 
     # imports for test
     # ----------------
-    from BFT_decoding.filesClasses import getFileParser
+    from .filesClasses import getFileParser
     import tkinter as tk
     from tkinter import filedialog
 
@@ -1046,6 +1046,20 @@ if __name__ == "__main__":
         params["hyb_list"] = list(range(9)) * 2 + list(range(8))
         params["type_list"] = ["Cy7", ] * 9 + ["Cy5", ] * 9 + ["Cy3", ] * 8
         params["roi"] = None
+
+    elif microscope_type == "Triton":
+
+        fovs = [(0, 0), (0, 1), (0, 2)]
+
+        # stage_pixel_matrix = 14.1 * np.array([[1, 0], [0, 1]])
+        stage_pixel_matrix = 8 * np.array([[1, 0], [0, 1]])
+
+        params["num_bits"] = 16
+        params["hyb_list"] = list(range(4)) * 4
+        params["type_list"] = ["Cy7"] * 4 + ["Cy5"] * 4 + ["Alexa594"] * 4 + ["Cy3"] * 4
+        params["roi"] = 2
+        # params["roi"] = 1
+        # params["roi"] = None
 
 
     # Print some of the params

@@ -15,9 +15,9 @@ import shutil
 import h5py
 import numpy as np
 import pandas as pd
+from scipy.signal import convolve2d
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from scipy.signal import convolve2d
         
 class FpkmData:
     def __init__(self, fpkm_path, blank_fpkm_threshold = 0):
@@ -85,7 +85,129 @@ class SpotsData:
         elif self.microscope_type == "Dory" or 'Confocal':
             fov = file.split('_')[1]
         return fov
-    
+
+    def load_spots_from_polaris_csv(self):
+        coord_data_pattern = re.compile(r".+\.csv$", flags=re.IGNORECASE)
+        # Copy files to backup folder
+        coords_filelist = []
+        for file in os.listdir(self.processed_path):
+            if re.match(coord_data_pattern, file):
+                coords_filelist.append(file)
+        # Initialize lists to store data from all files
+        all_zcoords = []
+        all_ycoords = []
+        all_xcoords = []
+        all_fovs = []
+        all_spot_sizes = []
+        all_min_dists = []
+        all_mean_intensities = []
+        all_onoff_ratio1 = []
+        all_mindist2 = []
+        all_meaninten2 = []
+        all_onoff_ratio2 = []
+        all_mindist3 = []
+        all_meaninten3 = []
+        all_onoff_ratio3 = []
+        all_mindist1_2_ratio = []
+        all_mindist1_3_ratio = []
+        all_size_x = []
+        all_size_y = []
+        all_size_conn = []
+        all_genes = []
+
+        # Loop and accumulate
+        for file in coords_filelist:
+            fov = file.split('_')[0]
+            print(f"Loading Polaris spot output information from FOV {fov}")
+            df = pd.read_csv(os.path.join(self.processed_path, file))
+
+            n = df.shape[0]
+
+            all_zcoords.append([0] * n)
+            all_ycoords.append(df['y'].values)
+            all_xcoords.append(df['x'].values)
+            all_fovs.append([fov] * n)
+            all_spot_sizes.append([2] * n)
+
+            prob = df['probability'].values
+            all_min_dists.append(prob)
+
+            bits = df.iloc[:, -16:]
+            all_mean_intensities.append(bits.mean(axis=1).values)
+
+            mask = bits.where(bits < 0.85)
+            onoff = np.linalg.norm(mask.fillna(0), axis=1)
+            all_onoff_ratio1.append(onoff)
+
+            all_mindist2.append(prob)
+            all_meaninten2.append(bits.mean(axis=1).values)
+            all_onoff_ratio2.append(onoff)
+            all_mindist3.append(prob)
+            all_meaninten3.append(bits.mean(axis=1).values)
+            all_onoff_ratio3.append(onoff)
+
+            all_mindist1_2_ratio.append([0] * n)
+            all_mindist1_3_ratio.append([0] * n)
+            all_size_x.append([0] * n)
+            all_size_y.append([0] * n)
+            all_size_conn.append([0] * n)
+            all_genes.append(df['predicted_name'].values)
+        self.zcoords = np.concatenate(all_zcoords)
+        self.ycoords = np.concatenate(all_ycoords)
+        self.xcoords = np.concatenate(all_xcoords)
+        self.fovs = sum(all_fovs, [])  # flatten list of lists
+        self.spot_sizes = np.concatenate(all_spot_sizes)
+        self.min_dists = np.concatenate(all_min_dists)
+        self.mean_intensities = np.concatenate(all_mean_intensities)
+        self.onoff_ratio1 = np.concatenate(all_onoff_ratio1)
+        self.mindist2 = np.concatenate(all_mindist2)
+        self.meaninten2 = np.concatenate(all_meaninten2)
+        self.onoff_ratio2 = np.concatenate(all_onoff_ratio2)
+        self.mindist3 = np.concatenate(all_mindist3)
+        self.meaninten3 = np.concatenate(all_meaninten3)
+        self.onoff_ratio3 = np.concatenate(all_onoff_ratio3)
+        self.mindist1_2_ratio = np.concatenate(all_mindist1_2_ratio)
+        self.mindist1_3_ratio = np.concatenate(all_mindist1_3_ratio)
+        self.size_x = np.concatenate(all_size_x)
+        self.size_y = np.concatenate(all_size_y)
+        self.size_conn = np.concatenate(all_size_conn)
+        self.genes = np.concatenate(all_genes)
+
+    def load_spots_from_starfish_csv(self):
+        coord_data_pattern = re.compile(r".+\.csv$", flags=re.IGNORECASE)
+        # Copy files to backup folder
+        coords_filelist = []
+        for file in os.listdir(self.processed_path):
+            match = re.match(coord_data_pattern, file)
+            if match:
+                coords_filelist.append(file)
+        for file in coords_filelist:
+            fov = file.split('_')[0]
+            print(f"Loading starfish spot output information from csv {fov}")
+            df = pd.read_csv(os.path.join(self.processed_path,file))
+            self.zcoords = np.array(df['z'])
+            self.ycoords = np.array(df['y'])
+            self.xcoords = np.array(df['x'])
+            self.fovs = np.array(df['fov'])
+            self.spot_sizes = np.array(df['radius'])
+            #self.spot_sizes = np.array(np.pi * (df['radius'] ** 2))
+            self.min_dists = np.array(df['distance'])
+            self.mean_intensities = np.array(df['mean_intensity'])
+            self.onoff_ratio1 = np.array([0]*df.shape[0]) #compute mean euclidean distances of 'off' bit intensities, defined as probability < 0.5
+            self.mindist2 = np.array([0]*df.shape[0])
+            self.meaninten2 = np.array([0]*df.shape[0])
+            self.onoff_ratio2 = np.array([0]*df.shape[0])
+            self.mindist3 = np.array([0]*df.shape[0])
+            self.meaninten3 = np.array([0]*df.shape[0])
+            self.onoff_ratio3 = np.array([0]*df.shape[0])
+            self.mindist1_2_ratio = np.array([0]*df.shape[0])
+            self.mindist1_3_ratio = np.array([0]*df.shape[0])
+            self.size_x = np.array([0]*df.shape[0])
+            self.size_y = np.array([0]*df.shape[0])
+            self.size_conn = np.array([0]*df.shape[0])
+            self.genes = np.array(df['target'])
+
+
     def load_spots_from_hdf5(self):
         # iterate through files and get spot metrics
         coords_filelist = self.get_coords_filelist()
@@ -93,6 +215,7 @@ class SpotsData:
             fov = self.get_fov_from_filename(file)
             print(f"Loading spot metrics from FOV {fov}")
             coords_cache = os.path.join(os.path.join(self.processed_path, 'coords_cache'),file)
+            print(coords_cache)
             with h5py.File(coords_cache,'r') as f:
                 for gene in f.keys():
                     for spot in f[gene]:
@@ -171,7 +294,7 @@ class SpotsData:
             coords_file_path = os.path.join(save_path, file)
 
             with h5py.File(coords_file_path, 'w') as coords_file:
-                fov_cond = [self.fovs == fov]
+                fov_cond = self.fovs == fov  # replace list with numpy.ndarray -> fov_cond = [self.fovs == fov][0] previous old version
                 print(self.fovs == fov)
                 genes_fov = self.genes[fov_cond]
                 zcoords_fov = self.zcoords[fov_cond]
@@ -274,6 +397,8 @@ class SpotsHistogram:
             self.intensity_bins = np.logspace(-2, 1, int(num_bins))
             self.intensity_bins_log = np.log10(self.intensity_bins)
             min_size = self.spotsData.spot_sizes.min()
+            if np.dtype(min_size.dtype) == np.float64:
+                min_size = int(min_size)
             self.size_bins = np.array(list(range(min_size,6))+[int(1e4)])
             if subset_genes and subset_blanks: # subset all barcodes
                 mask = np.ones(self.spotsData.genes.shape[0], dtype = np.bool)
@@ -331,7 +456,13 @@ class SpotsHistogram:
         total_hist = (total_hist + 2*eps)/self.fpkmData.num_total
         gene_hist = (gene_hist + eps)/self.fpkmData.num_genes
         
-        blank_fraction_heatmap = blank_hist / total_hist
+        # blank_fraction_heatmap = blank_hist / total_hist
+        with np.errstate(divide='ignore', invalid='ignore'):
+            blank_fraction_heatmap = np.divide(
+                blank_hist, total_hist,
+                out = np.zeros_like(blank_hist, dtype=float),
+                where=total_hist !=0
+            )
         
         if plot_heatmaps:
             self.plot_heatmaps(gene_hist, blank_hist, blank_fraction_heatmap,
@@ -339,55 +470,6 @@ class SpotsHistogram:
                                savepath = os.path.join(self.spotsData.processed_path, 
                                f"qc_plots/Signal_noise_blankfraction_heatmaps_{num_bins}bins.png"))
         return np.clip(blank_fraction_heatmap,0,1)
-    
-    def generate_blank_fraction_heatmap_extendedmisid(self,
-                                                      num_bins: int,
-                                                      kde_sigma: float,
-                                                      eps: float,
-                                                      plot_heatmaps = True):
-        
-        def gaussian_kernel(amp, sigma):
-            def twoD_Gaussian(xy, amplitude, xo, yo, sigma):
-                (x,y) = xy
-                xo = float(xo)
-                yo = float(yo)
-                a = 1/(2*sigma**2)
-                g = amplitude*np.exp( - (a*((x-xo)**2) + a*(y-yo)**2))
-                return g.ravel()
-            cropdim = int(sigma*4)+1
-            s = (cropdim-1)/2 #padding
-            xpts = np.arange(0,cropdim)
-            ypts = np.arange(0,cropdim)
-            xpts, ypts = np.meshgrid(xpts, ypts)
-            return twoD_Gaussian((xpts,ypts), amp, s, s, sigma).reshape(cropdim,cropdim)
-    
-        blank_hist = self.generate_3d_histogram(subset_blanks = True,
-                                                subset_genes = False,
-                                                num_bins = num_bins)
-        gene_hist = self.generate_3d_histogram(subset_blanks = False,
-                                                subset_genes = True,
-                                                num_bins = num_bins)
-        total_hist = blank_hist + gene_hist
-
-        if kde_sigma:
-            kernel = gaussian_kernel(1,kde_sigma)
-            for i in range(self.size_bins.shape[0]-1):
-                gene_hist[:,:,i] = convolve2d(gene_hist[:,:,i], kernel, mode='same',boundary='symmetric')
-                blank_hist[:,:,i] = convolve2d(blank_hist[:,:,i], kernel, mode='same',boundary='symmetric')
-                total_hist[:,:,i] = convolve2d(total_hist[:,:,i], kernel, mode='same',boundary='symmetric')
-        
-        blank_hist = (blank_hist + eps)/self.fpkmData.num_blanks
-        total_hist = (total_hist + 2*eps)/self.fpkmData.num_total
-        gene_hist = (gene_hist + eps)/self.fpkmData.num_genes
-        
-        blank_fraction_heatmap = blank_hist / total_hist
-        
-        if plot_heatmaps:
-            self.plot_heatmaps(gene_hist, blank_hist, blank_fraction_heatmap,
-                               self.distance_bins, self.intensity_bins,
-                               savepath = os.path.join(self.spotsData.processed_path, 
-                               f"qc_plots/Signal_noise_blankfraction_heatmaps_{num_bins}bins.png"))
-        return np.clip(blank_fraction_heatmap,0,5)
      
     def assign_blank_fraction_scores(self, blank_fraction_heatmap):
         print("Assigning blank fraction scores to spots")

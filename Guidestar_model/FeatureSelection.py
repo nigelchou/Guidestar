@@ -18,14 +18,19 @@ from DiscretisationFunctions import *
 import sys
 from mlxtend.feature_selection import SequentialFeatureSelector as SFS
 
-GS_filepath = '/Volumes/Seagate Backup Plus Drive/1 year RA data/Guidestar files/cells/colocaldist4_20240610/Cell_LM39_25FOVs_GuidestarGenes_training.csv'
-merfish_filepath = '/Volumes/Seagate Backup Plus Drive/1 year RA data/Guidestar files/cells/colocaldist4_20240610/Cell_LM39_25FOVs_MerfishData.csv'
-fpkm_path = '/Volumes/Seagate Backup Plus Drive/1 year RA data/Guidestar files/cells/100uM_data/codebook/fpkm_data.tsv'
+# ---- Main folder = the repository folder, which holds Data/ (layout described in Data/README.md). ----
+# Run this from the folder the file is in, or set the environment variable GUIDESTAR_MAIN_DIR to the repository path.
+main_dir = os.environ.get('GUIDESTAR_MAIN_DIR', '..')
+
+
+GS_filepath = os.path.join(main_dir, 'Data/100uM/output/colocalisation/colocaldist4_20240610/Cell_LM39_25FOVs_GuidestarGenes_training.csv')
+merfish_filepath = os.path.join(main_dir, 'Data/100uM/output/colocalisation/colocaldist4_20240610/Cell_LM39_25FOVs_MerfishData.csv')
+fpkm_path = os.path.join(main_dir, 'Data/100uM/codebook/fpkm_data.tsv')
 df_fpkm = pd.read_csv(fpkm_path, sep='\t', header=None, names=['genes','FPKM'])
 
 GS_genes_data = pd.read_csv(GS_filepath)
 merfish_data = pd.read_csv(merfish_filepath)
-output_dir = '/Volumes/Seagate Backup Plus Drive/1 year RA data/20240610/'
+output_dir = os.path.join(main_dir, 'Data/model_optimisation/20240610/')
 
 # CELL
 GS_gene_list = ['Acly','Hnf4a','Ube2z','Gpam']

@@ -3,7 +3,7 @@ sys.path.append("..")
 
 import pandas as pd
 import os
-from ColocalisationPipelineFunctions_v2 import *
+from Guidestar_colocalisation.ColocalisationPipelineFunctions_v3 import *
 import yaml
 
 def txt_to_dict(yml_file):

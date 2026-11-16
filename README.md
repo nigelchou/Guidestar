@@ -36,34 +36,27 @@ This project is licensed under ...
    
 ### Installation <a name="install"></a>
 
-1.	Download and install [Anaconda](https://www.anaconda.com/distribution/#download-section).
-2.	Create a new conda environment: [managing conda environments](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html). 
-3.	Download Guidestar Python package from this repository.
+1. Download and install [Anaconda](https://www.anaconda.com/distribution/#download-section).
+2. Clone this repository and create the conda environment from `environment.yml`:
 
-### Installation via Anaconda (recommended) <a name="install"></a>
+       (base) $ git clone https://github.com/nigelchou/Guidestar.git
+       (base) $ cd Guidestar
+       (base) $ conda env create --name Guidestar --file=environment.yml
+       (base) $ conda activate Guidestar
 
-To use ``Guidestar``, we recommend setting up a ``conda`` environment and cloning this repository.
+3. To run the Jupyter notebooks, install Jupyter in the same environment:
 
-      (base) $ conda create --name Guidestar
-      (base) $ conda activate Guidestar
-      (Guidestar) $ git clone https://github.com//nigelchou/Guidestar.git
-      (Guidestar) $ cd Guidestar
+       (Guidestar) $ conda install -c conda-forge jupyter
 
-### Installation from `environment.yml` file <a name="install"></a>
-
-Users can directly install the prequisite packages from `environment.yml` here after cloning in this repository:
-
-      (base) $ git clone https://github.com/nigelchou/Guidestar.git
-      (base) $ cd Guidestar
-      (base) $ conda env create --name Guidestar --file=environment.yml
-      (base) $ conda activate Guidestar
-
-To run the examples presented in `juypter` notebooks, install the extensions for `juypter`.
-
-      (Guidestar) $ conda install -c conda-forge jupyter
+### Data folder and `main_dir` <a name="data"></a>
+All scripts and notebooks read their data from the [Data](Data) folder of this repository, through one variable defined at the top of each file:
+```
+main_dir = os.environ.get('GUIDESTAR_MAIN_DIR', '..')
+```
+By default `main_dir` is the repository folder (`'.'`, `'..'` or `'../..'`, depending on where the file sits), so no path needs editing once the data are placed in `Data/` as described in [Data/README.md](Data/README.md). Run each script or notebook from the folder it is in, with the repository folder on the Python path (IDEs such as PyCharm and Spyder do this when the repository is opened as the project). To keep the data elsewhere, set the environment variable `GUIDESTAR_MAIN_DIR` to the folder that contains `Data/`.
 
 ### Blank Fraction Threshold Decoding <a name="BFT"></a>
-Run [MainScript_MERFISH_cell](../MainScript_MERFISH_cell.py) to perform decoding of MERFISH data with blank fraction thresholding to filter spots. You will be prompted to select your data directory which should contain your raw images. In addition, the data directory should have the following structure which includes codebook.tsv etc. etc. More details and description of different steps in the process are provided within the notebooks.
+Run [MainScript_MERFISH_cell](MainScript_MERFISH_cell.py) to perform decoding of MERFISH data with blank fraction thresholding to filter spots. The script reads the raw images from `Data/100uM` ([MainScript_MERFISH_tissue](MainScript_MERFISH_tissue.py) reads `Data/60uM`); to decode your own data, change `data_path` near the top of the script. The data directory should contain the raw images together with the `calibration` and `codebook` folders, as shown below. More details and descriptions of the different steps are provided as comments within the scripts.
 
 #### Data folder structure
 
@@ -108,7 +101,7 @@ user_params["reference_bit"] = 0
 user_params['fovs_to_process'] = list(range(25))
 ```
 
-[MainScript_MERFISH_cell](../MainScript_MERFISH_cell.py) and [MainScript_MERFISH_tissue](../MainScript_MERFISH_tissue.py) contain the parameters to reproduce the data described in this paper (link!). 
+[MainScript_MERFISH_cell](MainScript_MERFISH_cell.py) and [MainScript_MERFISH_tissue](MainScript_MERFISH_tissue.py) contain the parameters to reproduce the data described in this paper (link!). 
 
 ### Guidestar colocalisation
 Run [Colocalisation_Main_v1](Guidestar_colocalisation/Colocalisation_Main_v1.py) to perform detection and colocalisation of Guidestar spots. This produces the training data as well as MERFISH (for the full library) data in csv format which will be used for model training and application. Input parameters should be edited with respect to your data:
@@ -126,14 +119,59 @@ If you would like to use your own data, you will need to create a `.yml` file (i
 
 If you would like to perform further validation described in our paper, please use the following scripts:
 * visualisation: [Colocalisation_Visualisation_v1](Guidestar_colocalisation/Colocalisation_Visualisation_v1.py)
-* colocalisation distance optimisation: [NegativeControlColocalisation](Guidestar_colocalisation/NegativeControlColocalisation.py) to generate data and [SuppFig2_colocalisationdistance](Figures/SuppFig2_colocalisationdistance.py) to generate the figure
+* colocalisation distance optimisation: [NegativeControlColocalisation](Guidestar_colocalisation/NegativeControlColocalisation.py) to generate data and [SuppFig2_colocalisationdistance](Figures/SuppFig2_colocalisationdistance.ipynb) to generate the figure
 * misidentification rate tuning: [Colocalisation_Main_extendedmisid_v1](Guidestar_colocalisation/Colocalisation_Main_extendedmisid_v1.py) to generate data and [Fig2b_misidratevalidation](Figures/Fig2b_misidratevalidation.py) to generate the figure
 
 ### Training and applying your own Guidestar model
 To train your own Guidestar model, please use [TestSetResults](Guidestar_model/TestSetResults.py). See [Fig2def_Cell_testsetresults](Figures/Fig2def_Cell_testsetresults.py) for an example. This step requires the csv files with suffix `'_GuidestarGenes_training.csv'` and `'_MerfishData.csv'` generated in [Colocalisation_Main_v1](Guidestar_colocalisation/Colocalisation_Main_v1.py). You can also download the data files [here](https://drive.google.com/drive/folders/122UvRUf9SqZhPW2tYLKfgjZl1Y_HP1Kx?usp=drive_link).
 
+### Mouse brain dataset (LM50GS)
+The mouse brain dataset uses a different microscope and image format, so it has its own scripts. Run them in this order:
+
+1. Decoding: [MainScript_MERFISH_LM50GS_mbrain_analysis](MainScript_MERFISH_LM50GS_mbrain_analysis.py)
+2. Colocalisation: [Colocalisation_Main_v1_LM50GS_0728mBrain_set1](Guidestar_colocalisation/Colocalisation_Main_v1_LM50GS_0728mBrain_set1.py), with [NegativeControlColocalisation_LM50](Guidestar_colocalisation/NegativeControlColocalisation_LM50.py) for the colocalisation distance. Both read [genebitdict_brain.yml](genebitdict_brain.yml).
+3. Model optimisation: [NumberOfGuideGenes_LM50GS_mbrain](Guidestar_model/NumberOfGuideGenes_LM50GS_mbrain.py), [ImbalanceSamplingMethod_LM50GS](Guidestar_model/ImbalanceSamplingMethod_LM50GS.py), [FeatureSelection_LM50GS](Guidestar_model/FeatureSelection_LM50GS.py), [HyperparameterOptimization_LM50GS](Guidestar_model/HyperparameterOptimization_LM50GS.py)
+4. Cell segmentation and cell typing:
+   * [step0_registration_to_dapi](Benchmarking/step0_registration_to_dapi.ipynb) and [Code_single_frame_LM50GS_ome_to_cellpose](Benchmarking/Code_single_frame_LM50GS_ome_to_cellpose.ipynb) prepare the per-FOV DAPI images.
+   * Cell masks were segmented from the per-FOV DAPI images using Cellpose-SAM (Cellpose v4.0.8, cpsam model). The model was fine-tuned on 10 manually annotated FOVs from the dataset, and segmentation quality was assessed by visual inspection of masks overlaid on the DAPI signal per FOV. The masks are deposited with the data.
+   * [LM50GS_spot_assignment_final_ver2](LM50GS_spot_assignment_final_ver2.py) dilates the masks by 10 pixels to approximate cell boundaries and assigns the spots called by each method to cells based on centroid containment within the dilated masks. Cell centroids and areas are extracted with `skimage.measure.regionprops`.
+   * [LM50GS_post_cellpose_analysis_all_methods_10px.R](LM50GS_post_cellpose_analysis_all_methods_10px.R) performs clustering and cell type annotation (Seurat, SingleR).
+
+### Benchmarking against other decoding methods
+* Polaris: notebooks in [Benchmarking/Polaris](Benchmarking/Polaris). A DeepCell access token is required; set your own in the line `os.environ["DEEPCELL_ACCESS_TOKEN"]`.
+* starfish: notebooks in [Benchmarking/starfish](Benchmarking/starfish).
+* MERlin: parameter files in [Benchmarking/MERlin](Benchmarking/MERlin), followed by [MERlinAdaptiveFilter](Benchmarking/MERlinAdaptiveFilter.ipynb) and [adaptive_scores_post_merlin_processing](Benchmarking/adaptive_scores_post_merlin_processing.ipynb).
+* Edge cropping before comparison: [edge_crop_polaris_bef_spot_assignm](Benchmarking/edge_crop_polaris_bef_spot_assignm.py), [edge_crop_starfish_bef_spot_assignm](Benchmarking/edge_crop_starfish_bef_spot_assignm.py).
+* Colocalisation of each method's calls with Guidestar: `Colocalisation_Main_polaris_*` and `Colocalisation_Main_MERlin_*` in [Guidestar_colocalisation](Guidestar_colocalisation), which read [genebitdict_cell_benchmarking.yml](genebitdict_cell_benchmarking.yml), [genebitdict_liver_benchmarking.yml](genebitdict_liver_benchmarking.yml) and [genebitdict_brain.yml](genebitdict_brain.yml).
+
+These tools are not part of `environment.yml`. Install each in its own environment following its documentation: Cellpose (v4.0.8), DeepCell Polaris (`deepcell-spots`), starfish, MERlin, and R with Seurat and SingleR.
+
+### Data folder
+The scripts for the mouse brain dataset, the benchmarking and the supplementary figures read their data from the [Data](Data) folder of this repository, through one variable defined at the top of each file:
+```
+main_dir = os.environ.get('GUIDESTAR_MAIN_DIR', '..')
+```
+By default `main_dir` is the repository folder, so no path needs editing once the data are placed in `Data/` as described in [Data/README.md](Data/README.md). Run each script or notebook from the folder it is in. To keep the data elsewhere, set the environment variable `GUIDESTAR_MAIN_DIR` to the folder that contains `Data/`.
+
 ### Reproducing mansucript figures
 All data and code for the figures can be found in [DataForFigures](DataForFigures) and [Figures](Figures) respectively.
+
+| Figure | Script in [Figures](Figures) |
+|---|---|
+| Fig. 1b | `Fig1b_exampleimages.ipynb` |
+| Fig. 1d | `Fig1d_SuppFig2_colocalisationpercentage.py` |
+| Fig. 2b | `Fig2b_misidratevalidation.py` |
+| Fig. 2d-f | `Fig2def_Cell_testsetresults.py` |
+| Supp. Fig. 1 | `SuppFig1_exampleimages.ipynb`, `SuppFig1_SNRestimation.ipynb` |
+| Supp. Fig. 2, 3 | `SuppFig2_colocalisationdistance.ipynb` |
+| Supp. Fig. 4 | `SuppFig4_PRcurves.ipynb` |
+| Supp. Fig. 5, 6 | `Fig2def_Cell_testsetresults.py` (cell), `SuppFig5-6_Tissue_testsetresults.py` (liver) |
+| Supp. Fig. 7 | `SuppFig7_LM50GS_images.ipynb`; panels b, c from `NumberOfGuideGenes_LM50GS_mbrain.py` and `ImbalanceSamplingMethod_LM50GS.py` in [Guidestar_model](Guidestar_model) |
+| Supp. Fig. 8, 12 | `SuppFig8_12_starfish_polaris_LM50GS_final999.ipynb` |
+| Supp. Fig. 9 | `SuppFig9_region_cell_count_10px_final_ver.ipynb` |
+| Supp. Fig. 10 | `SuppFig10_starfish_polaris_LM39_cell_final999.ipynb` |
+| Supp. Fig. 11 | `SuppFig11_starfish_polaris_LM39_tissue_final999.ipynb` |
+| Supp. Fig. 13 | `SuppFig13.ipynb` |
 
 ## Contributing
 

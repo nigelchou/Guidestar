@@ -23,6 +23,11 @@ from tkinter import filedialog
 from scipy.signal import convolve2d
 from BFT_decoding.geneData import GeneData
 from mpl_toolkits.axes_grid1 import ImageGrid
+
+# ---- Set this once: the main folder that holds the data (Data/, Polaris_attempt/, MERlin/, ...). ----
+# Every other path below is built from it. (Alternatively set the environment variable GUIDESTAR_MAIN_DIR.)
+main_dir = os.environ.get('GUIDESTAR_MAIN_DIR', '/path_to_main_folder/')
+
         
 class FpkmData:
     def __init__(self, fpkm_path, blank_fpkm_threshold = 0):
@@ -1183,7 +1188,7 @@ if __name__ == "__main__":
     #     )
     #     root.destroy()
 
-    fpkm_path =  '//172.20.29.25/Jeeranan/MIKE/dataset/20191108_JM_L39_AML_2cD/100uM_data/codebook/fpkm_data.tsv' #r'\\10.217.24.76\Jinyue\Jeeranan\MLO_FPKM.tsv'
+    fpkm_path =  os.path.join(main_dir, 'Data/20191108_JM_L39_AML_2cD/100uM_data/codebook/fpkm_data.tsv') #os.path.join(main_dir, 'MLO_FPKM.tsv')
 
     spotdata, valdata, roc_label, roc_data,skewness_list = run_blank_fraction_analysis(processed_path,
                                 fpkm_path,
@@ -1199,7 +1204,7 @@ if __name__ == "__main__":
                                 size_threshold)
 
     #
-    # svm_file = pd.read_csv('//10.217.24.76/Jeeranan/Guidestar_stuff/SVM/SVM_results.csv')
+    # svm_file = pd.read_csv(os.path.join(main_dir, 'Guidestar_stuff/SVM/SVM_results.csv'))
     # c = svm_file['C'][:7]
     # counts = list(svm_file['count'][:7])
     # fpkm = list(svm_file['fpkm'][:7])

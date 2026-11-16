@@ -3,12 +3,13 @@ import numpy as np
 import os
 from FPKM_functions import *
 
-# LIVER
-GS_filepath = '../GuidestarGenes_training.csv'
-merfish_filepath = '../_MerfishData.csv'
-fpkm_path = '../'
+# Edit these for your dataset (output: BFT_misid_<dataset_name>_extended.csv)
+dataset_name = "Liver"
+GS_filepath = '/path_to_colocalisation_output/Liver_LM39_49FOVs_GuidestarGenes_training.csv'
+merfish_filepath = '/path_to_colocalisation_output/Liver_LM39_49FOVs_MerfishData.csv'
+fpkm_path = '../DataForFigures/liver_fpkm_data.tsv'
 df_fpkm = pd.read_csv(fpkm_path, sep='\t', header=None, names=['genes','FPKM'])
-output_dir = '../'
+output_dir = '/path_to_output_folder/'
 
 GS_genes_data = pd.read_csv(GS_filepath)
 merfish_data = pd.read_csv(merfish_filepath)
@@ -37,4 +38,4 @@ for bft in np.linspace(0.03,1,200, endpoint=True):
     counts_result.append(np.sum(counts_arr))
     
 result_df = pd.DataFrame({'bft':bft_list, 'fpkm': fpkm_result, 'counts': counts_result, 'misid': misid_result})
-result_df.to_csv(os.path.join(output_dir, 'BFT_misid_Liver_extended.csv'))
+result_df.to_csv(os.path.join(output_dir, f'BFT_misid_{dataset_name}_extended.csv'))

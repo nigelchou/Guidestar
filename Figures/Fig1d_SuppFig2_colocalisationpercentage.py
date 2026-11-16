@@ -83,9 +83,9 @@ fig.savefig(os.path.join(output_dir,'cell_negcontrol_bar_Guidestar_horizontal.sv
 
 GS_filepath = 'Liver_LM39_49FOVs_GuidestarGenes_training_extendedmisid.csv'
 merfish_filepath = 'Liver_LM39_49FOVs_MerfishData_extendedmisid.csv'
-fpkm_path = '../DataForFigures/fpkm_data.tsv'
+fpkm_path = '../DataForFigures/liver_fpkm_data.tsv'
 df_fpkm = pd.read_csv(fpkm_path, sep='\t', header=None, names=['genes','FPKM'])
-colocalization_counts_filepath = '../DataForFigures//Liver_LM39_49FOVs_Colocalisation_counts.csv'
+colocalization_counts_filepath = '../DataForFigures/Liver_LM39_49FOVs_Colocalisation_counts.csv'
 genelist = ['Hnf4a','Pigr','Gpam','Acly']
 negative_control_filepath = '../DataForFigures/Liver_LM39_49FOVs_negativecontrolresults.csv'
 

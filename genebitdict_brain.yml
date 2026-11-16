@@ -1,0 +1,22 @@
+raw_folder: 'Data/20250728_Lm50GS_mbrain_3cT3/' # relative to the repository folder (main_dir); an absolute path also works (folder with the raw images)
+merfish_outpath: 'Data/20250728_Lm50GS_mbrain_3cT3/output/user_86FOVs_mag0_10_lc350_20250929_1705/' # relative to the repository folder (main_dir); an absolute path also works (folder with the MERFISH decoding output)
+gene_list_merfish: ['Hcn1', 'Grik3', 'Itpr1', 'Kcna2', 'Kcnb1', 'Cacna1a', 'Foxo1', 'Scn3a', 'Slc1a2', 'Cdk6', 'Cacna1i', 'Cacna1e'] #gene to analyse              
+
+### set 1 genes ###
+
+bit_gene_dict_guidestar: {'Hcn1':['Cy7_06'], 'Grik3':['Cy7_07'], 'Itpr1':['Cy7_08'], 'Kcna2':['Cy5_07'], 'Kcnb1':['Alexa594_12'], 'Cacna1a':['Alexa594_13'], 'Foxo1':['Alexa594_06'], 'Scn3a':['Alexa594_07'], 'Slc1a2':['Cy5_10'], 'Cdk6':['Cy5_12'], 'Cacna1i':['Alexa594_09'], 'Cacna1e':['Alexa594_11']}
+
+gene_threshold_dict: {'Cy5_08': 0.06, 'Alexa594_06':0.08, 'Cy5_10':0.07, 'Alexa594_08':0.08, 'Cy7_09':0.085, 'Alexa594_13':0.09, 'Cy7_06':0.09, 'Cy7_10':0.075, 'Cy5_12':0.1, 'Alexa594_10':0.08, 'Cy7_07':0.1, 'Cy7_11':0.083, 'Cy5_11':0.065, 'Alexa594_09':0.08, 'Cy5_13':0.075, 'Alexa594_11':0.085, 'Cy7_08':0.09, 'Cy7_12':0.083, 'Alexa594_12':0.083, 'Cy7_13':0.09, 'Cy5_07':0.062, 'Cy5_09':0.12, 'Alexa594_07':0.073}
+
+gene_bit_dict_merfish: {'Hcn1': ['Cy7_02', 'Cy7_03', 'Cy5_02', 'Alexa594_02'],
+'Grik3': ['Cy7_02', 'Cy7_03', 'Alexa594_03', 'Alexa594_05'],
+'Itpr1': ['Cy5_01', 'Cy7_03', 'Cy5_04', 'Cy5_06'],
+'Kcna2': ['Cy7_02', 'Cy7_04', 'Cy5_03', 'Cy7_05'],
+'Kcnb1': ['Cy5_01', 'Cy5_02', 'Cy7_05', 'Alexa594_03'],
+'Cacna1a': ['Alexa594_01', 'Alexa594_03', 'Alexa594_04', 'Alexa594_05'],
+'Foxo1': ['Cy5_01', 'Cy7_01', 'Cy7_02', 'Cy5_02'],
+'Scn3a': ['Cy7_01', 'Cy5_02', 'Cy7_05', 'Cy5_06'],
+'Slc1a2': ['Cy5_02', 'Cy5_03', 'Alexa594_01', 'Cy5_06'],
+'Cdk6': ['Cy5_01', 'Cy7_01', 'Cy5_06', 'Alexa594_03'],
+'Cacna1i': ['Cy7_03', 'Cy5_03', 'Alexa594_01', 'Alexa594_05'],
+'Cacna1e': ['Cy7_01', 'Cy5_02', 'Alexa594_02', 'Cy5_05']}                                                              
